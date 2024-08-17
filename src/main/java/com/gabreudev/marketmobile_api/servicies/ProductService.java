@@ -17,4 +17,9 @@ public class ProductService {
         return repository.findAll();
     }
 
+    public String postProduct(Product data){
+        repository.save(data);
+        return data.getBarCode();
+    }
+
 }
