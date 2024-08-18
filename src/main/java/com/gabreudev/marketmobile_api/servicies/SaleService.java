@@ -4,6 +4,7 @@ import com.gabreudev.marketmobile_api.entities.Sale;
 import com.gabreudev.marketmobile_api.entities.SaleProduct;
 import com.gabreudev.marketmobile_api.repositories.SaleProductRepository;
 import com.gabreudev.marketmobile_api.repositories.SaleRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ public class SaleService {
     @Autowired
     SaleProductRepository productSaleRepository;
 
+    @Transactional
     public Long postSale(Sale data){
         Sale savedSale = saleRepository.save(data);
 

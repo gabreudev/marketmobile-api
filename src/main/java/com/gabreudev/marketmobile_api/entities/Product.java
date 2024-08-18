@@ -15,7 +15,6 @@ public class Product {
 
     private Float price;
 
-
     public Float getPrice() {
         return price;
     }

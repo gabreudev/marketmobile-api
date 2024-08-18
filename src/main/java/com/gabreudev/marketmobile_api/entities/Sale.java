@@ -1,5 +1,6 @@
 package com.gabreudev.marketmobile_api.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -15,7 +16,10 @@ public class Sale {
     private LocalDateTime saleDate;
 
     @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<SaleProduct> saleProducts;
+
+    private Float totalPrice;
 
     public List<SaleProduct> getSaleProducts() {
         return saleProducts;
