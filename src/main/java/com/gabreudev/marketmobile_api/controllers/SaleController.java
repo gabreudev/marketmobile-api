@@ -5,6 +5,7 @@ import com.gabreudev.marketmobile_api.servicies.SaleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -24,7 +25,12 @@ public class SaleController {
         return service.getAll();
     }
     @DeleteMapping("{id}")
-    public Long deleteSale(@RequestParam Long id){
+    public Long deleteSale(@PathVariable Long id){
         return service.deleteSale(id);
+    }
+    @GetMapping("between")
+    public List<Sale> salesBetween(@RequestParam LocalDateTime startDate,
+                                   @RequestParam LocalDateTime endDate){
+        return service.salesBetween(startDate, endDate);
     }
 }
