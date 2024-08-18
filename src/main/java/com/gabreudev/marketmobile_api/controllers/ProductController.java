@@ -15,7 +15,7 @@ public class ProductController {
     ProductService service;
 
     @GetMapping()
-    public List<Product> getAll(){
+    public List<Product> getAll() {
         return service.getAll();
     }
 
@@ -25,8 +25,13 @@ public class ProductController {
     }
 
     @DeleteMapping("{barCode}")
-    public String deleteProduct(@PathVariable String barCode){
+    public String deleteProduct(@PathVariable String barCode) {
         return service.deleteProduct(barCode);
+    }
+
+    @PutMapping()
+    public String editProduct(@RequestBody Product data) {
+        return service.editProduct(data);
     }
 
 }

@@ -27,4 +27,9 @@ public class ProductService {
         repository.delete(deleted);
         return deleted.getBarCode();
     }
+
+    public String editProduct(Product data) {
+        return repository.save(data).getBarCode();
+    }
+
 }
