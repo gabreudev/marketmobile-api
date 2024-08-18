@@ -1,4 +1,4 @@
-package com.gabreudev.marketmobile_api.Repositories;
+package com.gabreudev.marketmobile_api.repositories;
 
 import com.gabreudev.marketmobile_api.entities.Product;
 import org.springframework.data.jpa.repository.JpaRepository;

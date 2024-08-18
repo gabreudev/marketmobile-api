@@ -18,7 +18,16 @@ public class SaleProduct {
 
     private Integer quantity;
 
+
     private Float partialPrice;
+
+    public Sale getSale() {
+        return sale;
+    }
+
+    public void setSale(Sale sale) {
+        this.sale = sale;
+    }
 
     public Product getProduct() {
         return product;

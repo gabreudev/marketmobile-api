@@ -24,4 +24,9 @@ public class ProductController {
         return service.postProduct(data);
     }
 
+    @DeleteMapping("{barCode}")
+    public String deleteProduct(@PathVariable String barCode){
+        return service.deleteProduct(barCode);
+    }
+
 }
