@@ -33,4 +33,9 @@ public class SaleService {
     public List<Sale> getAll(){
         return saleRepository.findAll();
     }
+
+    public Long deleteSale(Long id) {
+        saleRepository.deleteById(id);
+        return id;
+    }
 }

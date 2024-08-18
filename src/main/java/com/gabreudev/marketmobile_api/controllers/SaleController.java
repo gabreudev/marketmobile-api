@@ -23,4 +23,8 @@ public class SaleController {
     public List<Sale> getAll(){
         return service.getAll();
     }
+    @DeleteMapping("{id}")
+    public Long deleteSale(@RequestParam Long id){
+        return service.deleteSale(id);
+    }
 }

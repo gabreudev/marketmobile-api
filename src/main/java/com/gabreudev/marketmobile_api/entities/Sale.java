@@ -45,6 +45,12 @@ public class Sale {
         this.saleProducts = saleProducts;
     }
 
+    public Float getTotalPrice() {
+        return totalPrice;
+    }
 
+    public void setTotalPrice(Float totalPrice) {
+        this.totalPrice = totalPrice;
+    }
 }
 
