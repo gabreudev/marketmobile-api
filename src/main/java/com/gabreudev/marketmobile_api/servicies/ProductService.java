@@ -1,5 +1,6 @@
 package com.gabreudev.marketmobile_api.servicies;
 
+import com.gabreudev.marketmobile_api.exceptions.ProductNotFoundException;
 import com.gabreudev.marketmobile_api.repositories.ProductRepository;
 import com.gabreudev.marketmobile_api.entities.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +24,11 @@ public class ProductService {
     }
 
     public String deleteProduct(String barCode) {
-        Product deleted = repository.findById(barCode).orElseThrow();
+        Product deleted = repository.findById(barCode)
+                .orElseThrow(() -> new ProductNotFoundException("Produto com código de barras " + barCode + " não encontrado"));
         repository.delete(deleted);
         return deleted.getBarCode();
     }
-
     public String editProduct(Product data) {
         return repository.save(data).getBarCode();
     }

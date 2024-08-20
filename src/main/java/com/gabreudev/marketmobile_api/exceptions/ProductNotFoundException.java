@@ -1,10 +1,10 @@
 package com.gabreudev.marketmobile_api.exceptions;
 
 public class ProductNotFoundException extends RuntimeException{
-    ProductNotFoundException(){
+    public ProductNotFoundException(){
         super("produto não encontrado");
     }
-    ProductNotFoundException(String message){
+    public ProductNotFoundException(String message){
         super(message);
     }
 }

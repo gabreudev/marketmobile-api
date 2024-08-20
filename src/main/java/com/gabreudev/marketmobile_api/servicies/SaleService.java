@@ -1,7 +1,10 @@
 package com.gabreudev.marketmobile_api.servicies;
 
+import com.gabreudev.marketmobile_api.entities.Product;
 import com.gabreudev.marketmobile_api.entities.Sale;
 import com.gabreudev.marketmobile_api.entities.SaleProduct;
+import com.gabreudev.marketmobile_api.exceptions.ProductNotFoundException;
+import com.gabreudev.marketmobile_api.repositories.ProductRepository;
 import com.gabreudev.marketmobile_api.repositories.SaleProductRepository;
 import com.gabreudev.marketmobile_api.repositories.SaleRepository;
 import jakarta.transaction.Transactional;
@@ -20,14 +23,22 @@ public class SaleService {
     @Autowired
     SaleProductRepository productSaleRepository;
 
+    @Autowired
+    ProductRepository productRepository;
+
     @Transactional
     public Long postSale(Sale data){
-        Sale savedSale = saleRepository.save(data);
 
         for (SaleProduct saleProduct : data.getSaleProducts()) {
-            saleProduct.setSale(savedSale);
-            productSaleRepository.save(saleProduct);
+            String barCode = saleProduct.getProduct().getBarCode();
+            Product product = productRepository.findById(barCode)
+                    .orElseThrow(() -> new ProductNotFoundException("Produto com código de barras " + barCode + " não encontrado"));
+
+            saleProduct.setProduct(product);
+            saleProduct.setPartialPrice(product.getPrice() * saleProduct.getQuantity());
         }
+
+        Sale savedSale = saleRepository.save(data);
         return savedSale.getId();
     }
 
