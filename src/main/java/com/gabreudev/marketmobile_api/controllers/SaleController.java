@@ -28,7 +28,7 @@ public class SaleController {
     public Long deleteSale(@PathVariable Long id){
         return service.deleteSale(id);
     }
-    @GetMapping("between")
+    @GetMapping("sale/between")
     public List<Sale> salesBetween(@RequestParam LocalDateTime startDate,
                                    @RequestParam LocalDateTime endDate){
         return service.salesBetween(startDate, endDate);

@@ -1,8 +1,11 @@
 package com.gabreudev.marketmobile_api.controllers;
 
 import com.gabreudev.marketmobile_api.entities.Product;
+import com.gabreudev.marketmobile_api.exceptions.ProductNotFoundException;
 import com.gabreudev.marketmobile_api.servicies.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,8 +28,10 @@ public class ProductController {
     }
 
     @DeleteMapping("{barCode}")
-    public String deleteProduct(@PathVariable String barCode) {
-        return service.deleteProduct(barCode);
+    public ResponseEntity<String> deleteProduct(@PathVariable String barCode) {
+        String codeBar = service.deleteProduct(barCode);
+        return ResponseEntity.ok(codeBar);
+
     }
 
     @PutMapping()
