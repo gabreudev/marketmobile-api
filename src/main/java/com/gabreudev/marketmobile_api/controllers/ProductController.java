@@ -3,6 +3,7 @@ package com.gabreudev.marketmobile_api.controllers;
 import com.gabreudev.marketmobile_api.entities.Product;
 import com.gabreudev.marketmobile_api.exceptions.ProductNotFoundException;
 import com.gabreudev.marketmobile_api.servicies.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class ProductController {
     }
 
     @PostMapping()
-    public String postProduct(@RequestBody Product data) {
+    public String postProduct(@Valid @RequestBody Product data) {
         return service.postProduct(data);
     }
 
@@ -35,7 +36,7 @@ public class ProductController {
     }
 
     @PutMapping()
-    public String editProduct(@RequestBody Product data) {
+    public String editProduct(@Valid @RequestBody Product data) {
         return service.editProduct(data);
     }
 

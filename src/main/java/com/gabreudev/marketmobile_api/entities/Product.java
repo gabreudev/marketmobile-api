@@ -2,18 +2,25 @@ package com.gabreudev.marketmobile_api.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.*;
 
 @Entity
 public class Product {
 
     @Id
+    @Pattern(regexp = "\\d{12}", message = "O código de barras deve ter 12 dígitos.")
     private String barCode;
 
+    @NotBlank(message = "O nome do produto não pode ser nulo.")
+    @Size(min = 2, max = 100, message = "O nome do produto deve ter entre 2 e 100 caracteres.")
     private String name;
 
     private String description;
 
+    @NotBlank(message = "O preço do produto não pode ser nulo.")
+    @Positive(message = "O preço deve ser um valor positivo.")
     private Float price;
+
 
     public Float getPrice() {
         return price;

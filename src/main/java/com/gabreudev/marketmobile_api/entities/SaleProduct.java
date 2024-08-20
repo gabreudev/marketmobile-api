@@ -2,6 +2,7 @@ package com.gabreudev.marketmobile_api.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class SaleProduct {
@@ -18,9 +19,10 @@ public class SaleProduct {
     @JoinColumn(name = "product_barcode")
     private Product product;
 
+    @NotNull
     private Integer quantity;
 
-
+    @NotNull
     private Float partialPrice;
 
     public Sale getSale() {

@@ -2,6 +2,7 @@ package com.gabreudev.marketmobile_api.entities;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,6 +20,7 @@ public class Sale {
     @JsonManagedReference
     private List<SaleProduct> saleProducts;
 
+    @NotNull
     private Float totalPrice;
 
     public List<SaleProduct> getSaleProducts() {
