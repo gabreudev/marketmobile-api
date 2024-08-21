@@ -17,7 +17,7 @@ public class Product {
 
     private String description;
 
-    @NotBlank(message = "O preço do produto não pode ser nulo.")
+    @NotNull(message = "O preço do produto não pode ser nulo.")
     @Positive(message = "O preço deve ser um valor positivo.")
     private Float price;
 

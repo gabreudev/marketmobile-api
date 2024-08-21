@@ -21,13 +21,15 @@ public class ProductController {
     ProductService service;
 
     @GetMapping()
-    public List<Product> getAll() {
-        return service.getAll();
+    public ResponseEntity<List<Product>> getAll() {
+        List<Product> list= service.getAll();
+        return ResponseEntity.ok(list);
     }
 
     @PostMapping()
-    public String postProduct(@Valid @RequestBody Product data) {
-        return service.postProduct(data);
+    public ResponseEntity<String> postProduct(@Valid @RequestBody Product data) {
+        String codeResponde = service.postProduct(data);
+        return ResponseEntity.ok(codeResponde);
     }
 
     @DeleteMapping("{barCode}")
@@ -38,8 +40,9 @@ public class ProductController {
     }
 
     @PutMapping()
-    public String editProduct(@Valid @RequestBody Product data) {
-        return service.editProduct(data);
+    public ResponseEntity<String> editProduct(@Valid @RequestBody Product data) {
+        String codeBar = service.editProduct(data);
+        return ResponseEntity.ok(codeBar);
     }
 
 }
