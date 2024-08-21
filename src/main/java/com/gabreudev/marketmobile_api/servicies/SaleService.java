@@ -37,7 +37,7 @@ public class SaleService {
             saleProduct.setProduct(product);
             saleProduct.setPartialPrice(product.getPrice() * saleProduct.getQuantity());
         }
-
+        data.setSaleDate(LocalDateTime.now());
         Sale savedSale = saleRepository.save(data);
         return savedSale.getId();
     }
