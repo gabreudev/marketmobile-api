@@ -1,20 +1,15 @@
 package com.gabreudev.marketmobile_api.entities;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
 
-
+@Entity
 public class User implements UserDetails {
 
     @Id
@@ -27,10 +22,19 @@ public class User implements UserDetails {
 
     private String password;
 
+    @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
     private Boolean enabled;
 
+    public User( String username, String email, String password, UserRole userRole, Boolean enabled) {
+
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.userRole = userRole;
+        this.enabled = enabled;
+    }
 
     public UUID getId() {
         return id;
@@ -77,7 +81,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return enabled;
     }
 
     @Override
