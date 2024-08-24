@@ -1,4 +1,4 @@
-package com.gabreudev.marketmobile_api.entities;
+package com.gabreudev.marketmobile_api.entities.user;
 
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;

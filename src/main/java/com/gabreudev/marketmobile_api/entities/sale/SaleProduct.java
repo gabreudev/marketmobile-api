@@ -1,6 +1,7 @@
-package com.gabreudev.marketmobile_api.entities;
+package com.gabreudev.marketmobile_api.entities.sale;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.gabreudev.marketmobile_api.entities.product.Product;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 

@@ -1,5 +1,5 @@
 package com.gabreudev.marketmobile_api.repositories;
-import com.gabreudev.marketmobile_api.entities.User;
+import com.gabreudev.marketmobile_api.entities.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;

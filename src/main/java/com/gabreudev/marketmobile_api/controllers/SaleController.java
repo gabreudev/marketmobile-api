@@ -1,6 +1,6 @@
 package com.gabreudev.marketmobile_api.controllers;
 
-import com.gabreudev.marketmobile_api.entities.Sale;
+import com.gabreudev.marketmobile_api.entities.sale.Sale;
 import com.gabreudev.marketmobile_api.servicies.SaleService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,6 @@
 package com.gabreudev.marketmobile_api.controllers;
 
-import com.gabreudev.marketmobile_api.entities.Product;
+import com.gabreudev.marketmobile_api.entities.product.Product;
 import com.gabreudev.marketmobile_api.servicies.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
