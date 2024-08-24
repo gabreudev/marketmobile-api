@@ -37,6 +37,12 @@ public class User implements UserDetails {
         this.enabled = enabled;
     }
 
+    public User(String email, String encryptedPassword, UserRole role) {
+        this.email = email;
+        this.password = encryptedPassword;
+        this.userRole = role;
+    }
+
     public UUID getId() {
         return id;
     }

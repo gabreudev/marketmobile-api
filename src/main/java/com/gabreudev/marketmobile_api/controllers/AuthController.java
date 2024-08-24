@@ -1,5 +1,7 @@
 package com.gabreudev.marketmobile_api.controllers;
 
+import com.gabreudev.marketmobile_api.entities.user.AuthenticationDTO;
+import com.gabreudev.marketmobile_api.entities.user.RegisterDTO;
 import com.gabreudev.marketmobile_api.entities.user.User;
 import com.gabreudev.marketmobile_api.repositories.UserRepository;
 import jakarta.validation.Valid;
@@ -25,7 +27,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data){
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
         var token = tokenService.generateToken((User) auth.getPrincipal());
@@ -35,10 +37,10 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterDTO data){
-        if(this.repository.findByLogin(data.login()) != null) return ResponseEntity.badRequest().build();
+        if(this.repository.findByEmail(data.email()).isPresent()) return ResponseEntity.badRequest().build();
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        User newUser = new User(data.login(), encryptedPassword, data.role());
+        User newUser = new User(data.email(), encryptedPassword, data.role());
 
         this.repository.save(newUser);
 
