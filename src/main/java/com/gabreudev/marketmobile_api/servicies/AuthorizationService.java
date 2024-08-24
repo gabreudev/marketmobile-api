@@ -17,8 +17,4 @@ public class AuthorizationService implements UserDetailsService {
         return null;
     }
 
-    public UserDetails loadUSerByEmail(String email){
-        return repository.findByEmail(email)
-                .orElseThrow( ()-> new UsernameNotFoundException(String.format("usuario com e emial %s não foi encontrado", email)));
-    }
 }

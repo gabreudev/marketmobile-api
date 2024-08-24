@@ -3,6 +3,7 @@ package com.gabreudev.marketmobile_api.controllers;
 import com.gabreudev.marketmobile_api.entities.user.AuthenticationDTO;
 import com.gabreudev.marketmobile_api.entities.user.RegisterDTO;
 import com.gabreudev.marketmobile_api.entities.user.User;
+import com.gabreudev.marketmobile_api.infra.Config.TokenService;
 import com.gabreudev.marketmobile_api.repositories.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterDTO data){
-        if(this.repository.findByEmail(data.email()).isPresent()) return ResponseEntity.badRequest().build();
+        if(this.repository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().build();
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
         User newUser = new User(data.email(), encryptedPassword, data.role());
