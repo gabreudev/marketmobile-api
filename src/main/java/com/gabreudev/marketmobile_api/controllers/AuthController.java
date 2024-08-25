@@ -1,6 +1,7 @@
 package com.gabreudev.marketmobile_api.controllers;
 
 import com.gabreudev.marketmobile_api.entities.user.AuthenticationDTO;
+import com.gabreudev.marketmobile_api.entities.user.LoginResponseDTO;
 import com.gabreudev.marketmobile_api.entities.user.RegisterDTO;
 import com.gabreudev.marketmobile_api.entities.user.User;
 import com.gabreudev.marketmobile_api.infra.Config.TokenService;
@@ -27,7 +28,7 @@ public class AuthController {
     private TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data){
+    public ResponseEntity login(@RequestBody AuthenticationDTO data){
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
