@@ -8,6 +8,7 @@ import com.gabreudev.marketmobile_api.infra.Config.TokenService;
 import com.gabreudev.marketmobile_api.repositories.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,23 +30,29 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody AuthenticationDTO data){
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
-        var auth = this.authenticationManager.authenticate(usernamePassword);
-
-        var token = tokenService.generateToken((User) auth.getPrincipal());
-
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+        try {
+            var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
+            var auth = this.authenticationManager.authenticate(usernamePassword);
+            var token = tokenService.generateToken((User) auth.getPrincipal());
+            return ResponseEntity.ok(new LoginResponseDTO(token));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Login falhou: " + e.getMessage());
+        }
     }
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterDTO data){
+     try{
         if(this.repository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().build();
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
         User newUser = new User(data.email(), encryptedPassword, data.role());
 
         this.repository.save(newUser);
-
+        System.out.println( newUser.getEmail() + newUser.getPassword());
         return ResponseEntity.ok().build();
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Cadastro falhou: " + e.getMessage());
+    }
     }
 }

@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
 
+
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
@@ -26,21 +27,24 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
-    private Boolean enabled;
+    private Boolean enabled = true;
 
-    public User( String username, String email, String password, UserRole userRole, Boolean enabled) {
+    public User() {
+    }
 
+    public User(String username, String email, String password, UserRole userRole, Boolean enabled) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.userRole = userRole;
-        this.enabled = enabled;
+        this.enabled = enabled != null ? enabled : true;
     }
 
     public User(String email, String encryptedPassword, UserRole role) {
         this.email = email;
         this.password = encryptedPassword;
         this.userRole = role;
+        this.enabled = true;
     }
 
     public UUID getId() {
@@ -78,21 +82,21 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return enabled != null ? enabled : false; // Verificar se o valor é nulo antes de retornar
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
+        return true;
     }
 }
