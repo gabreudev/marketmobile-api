@@ -1,4 +1,4 @@
-package com.gabreudev.marketmobile_api.entities;
+package com.gabreudev.marketmobile_api.entities.sale;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;

@@ -1,6 +1,6 @@
 package com.gabreudev.marketmobile_api.repositories;
 
-import com.gabreudev.marketmobile_api.entities.Sale;
+import com.gabreudev.marketmobile_api.entities.sale.Sale;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;

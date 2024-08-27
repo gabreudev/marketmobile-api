@@ -1,8 +1,8 @@
 package com.gabreudev.marketmobile_api.servicies;
 
-import com.gabreudev.marketmobile_api.entities.Product;
-import com.gabreudev.marketmobile_api.entities.Sale;
-import com.gabreudev.marketmobile_api.entities.SaleProduct;
+import com.gabreudev.marketmobile_api.entities.product.Product;
+import com.gabreudev.marketmobile_api.entities.sale.Sale;
+import com.gabreudev.marketmobile_api.entities.sale.SaleProduct;
 import com.gabreudev.marketmobile_api.exceptions.ProductNotFoundException;
 import com.gabreudev.marketmobile_api.repositories.ProductRepository;
 import com.gabreudev.marketmobile_api.repositories.SaleProductRepository;

@@ -1,4 +1,4 @@
-package com.gabreudev.marketmobile_api.entities;
+package com.gabreudev.marketmobile_api.entities.product;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
