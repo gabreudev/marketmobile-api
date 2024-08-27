@@ -1,7 +1,9 @@
 package com.gabreudev.marketmobile_api.controllers;
 
 import com.gabreudev.marketmobile_api.entities.product.Product;
+import com.gabreudev.marketmobile_api.infra.Config.SecurityConfigurations;
 import com.gabreudev.marketmobile_api.servicies.ProductService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +16,7 @@ import java.util.List;
 @RequestMapping("product")
 @RestController
 @Slf4j
+@SecurityRequirement(name = SecurityConfigurations.SECURITY)
 @Tag(name = "Endpoints de produtos")
 public class ProductController {
 
