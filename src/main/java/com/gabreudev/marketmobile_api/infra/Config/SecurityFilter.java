@@ -1,6 +1,5 @@
 package com.gabreudev.marketmobile_api.infra.Config;
 
-
 import com.gabreudev.marketmobile_api.repositories.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -43,3 +42,4 @@ public class SecurityFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         }
     }
+
