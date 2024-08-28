@@ -3,6 +3,7 @@ package com.gabreudev.marketmobile_api.servicies;
 import com.gabreudev.marketmobile_api.entities.product.Product;
 import com.gabreudev.marketmobile_api.entities.sale.Sale;
 import com.gabreudev.marketmobile_api.entities.sale.SaleProduct;
+import com.gabreudev.marketmobile_api.entities.user.User;
 import com.gabreudev.marketmobile_api.exceptions.ProductNotFoundException;
 import com.gabreudev.marketmobile_api.repositories.ProductRepository;
 import com.gabreudev.marketmobile_api.repositories.SaleProductRepository;
@@ -17,6 +18,7 @@ import java.util.List;
 @Service
 public class SaleService {
 
+
     @Autowired
     SaleRepository saleRepository;
 
@@ -27,7 +29,8 @@ public class SaleService {
     ProductRepository productRepository;
 
     @Transactional
-    public Long postSale(Sale data){
+    public Long postSale(Sale data, User user){
+        data.setUser(user); // Associa a venda ao usuário autenticado
 
         for (SaleProduct saleProduct : data.getSaleProducts()) {
             String barCode = saleProduct.getProduct().getBarCode();
@@ -42,16 +45,18 @@ public class SaleService {
         return savedSale.getId();
     }
 
-    public List<Sale> getAll(){
-        return saleRepository.findAll();
+    public List<Sale> getAllSalesByUser(User user) {
+        return saleRepository.findByUser(user);
     }
 
-    public Long deleteSale(Long id) {
-        saleRepository.deleteById(id);
+    public Long deleteSale(Long id, User user) {
+        Sale sale = saleRepository.findByIdAndUser(id, user)
+                .orElseThrow(() -> new ProductNotFoundException("Venda não encontrada ou você não tem permissão para deletar esta venda."));
+        saleRepository.delete(sale);
         return id;
     }
 
-    public List<Sale> salesBetween(LocalDateTime startDate, LocalDateTime endDate) {
-        return saleRepository.findBySaleDateBetween(startDate, endDate);
+    public List<Sale> salesBetween(LocalDateTime startDate, LocalDateTime endDate, User user) {
+        return saleRepository.findBySaleDateBetweenAndUser(startDate, endDate, user);
     }
 }
