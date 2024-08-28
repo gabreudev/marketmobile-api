@@ -18,7 +18,7 @@ public class ProductService {
     ProductRepository repository;
 
     public List<ProductResponseDTO> getAllProductsByUser(User user) {
-        List<ProductResponseDTO> products = repository.findAll().stream().map(ProductResponseDTO::new).toList();
+        List<ProductResponseDTO> products = repository.findByUser(user).stream().map(ProductResponseDTO::new).toList();
         return products;
     }
 

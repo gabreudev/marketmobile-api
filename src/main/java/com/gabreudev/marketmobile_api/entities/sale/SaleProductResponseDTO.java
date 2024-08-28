@@ -6,4 +6,6 @@ public record SaleProductResponseDTO(
         String productName,
         Integer quantity,
         Float partialPrice
-) {}
+) {
+
+}

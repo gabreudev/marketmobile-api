@@ -1,8 +1,8 @@
 package com.gabreudev.marketmobile_api.servicies;
 
 import com.gabreudev.marketmobile_api.entities.product.Product;
-import com.gabreudev.marketmobile_api.entities.sale.Sale;
-import com.gabreudev.marketmobile_api.entities.sale.SaleProduct;
+import com.gabreudev.marketmobile_api.entities.product.ProductResponseDTO;
+import com.gabreudev.marketmobile_api.entities.sale.*;
 import com.gabreudev.marketmobile_api.entities.user.User;
 import com.gabreudev.marketmobile_api.exceptions.ProductNotFoundException;
 import com.gabreudev.marketmobile_api.repositories.ProductRepository;
@@ -29,24 +29,25 @@ public class SaleService {
     ProductRepository productRepository;
 
     @Transactional
-    public Long postSale(Sale data, User user){
-        data.setUser(user);
+    public Long postSale(SaleRegisterDTO data, User user){
+        Sale sale = new Sale(data);
+        sale.setUser(user);
 
-        for (SaleProduct saleProduct : data.getSaleProducts()) {
+        for (SaleProduct saleProduct : sale.getSaleProducts()) {
             String barCode = saleProduct.getProduct().getBarCode();
             Product product = productRepository.findById(barCode)
                     .orElseThrow(() -> new ProductNotFoundException("Produto com código de barras " + barCode + " não encontrado"));
 
             saleProduct.setProduct(product);
-            saleProduct.setPartialPrice(product.getPrice() * saleProduct.getQuantity());
         }
-        data.setSaleDate(LocalDateTime.now());
-        Sale savedSale = saleRepository.save(data);
+        sale.setSaleDate(LocalDateTime.now());
+        Sale savedSale = saleRepository.save(sale);
         return savedSale.getId();
     }
 
-    public List<Sale> getAllSalesByUser(User user) {
-        return saleRepository.findByUser(user);
+    public List<SaleResponseDTO> getAllSalesByUser(User user) {
+        List<SaleResponseDTO> sales = saleRepository.findByUser(user).stream().map(SaleResponseDTO::new).toList();
+        return sales;
     }
 
     public Long deleteSale(Long id, User user) {
@@ -56,7 +57,7 @@ public class SaleService {
         return id;
     }
 
-    public List<Sale> salesBetween(LocalDateTime startDate, LocalDateTime endDate, User user) {
-        return saleRepository.findBySaleDateBetweenAndUser(startDate, endDate, user);
+    public List<SaleResponseDTO> salesBetween(LocalDateTime startDate, LocalDateTime endDate, User user) {
+        return saleRepository.findBySaleDateBetweenAndUser(startDate, endDate, user).stream().map(SaleResponseDTO::new).toList();
     }
 }

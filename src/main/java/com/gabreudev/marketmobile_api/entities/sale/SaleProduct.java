@@ -26,6 +26,7 @@ public class SaleProduct {
     @NotNull
     private Float partialPrice;
 
+
     public Sale getSale() {
         return sale;
     }

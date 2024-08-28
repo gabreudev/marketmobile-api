@@ -1,6 +1,7 @@
 package com.gabreudev.marketmobile_api.controllers;
 
-import com.gabreudev.marketmobile_api.entities.sale.Sale;
+import com.gabreudev.marketmobile_api.entities.sale.SaleRegisterDTO;
+import com.gabreudev.marketmobile_api.entities.sale.SaleResponseDTO;
 import com.gabreudev.marketmobile_api.entities.user.User;
 import com.gabreudev.marketmobile_api.infra.Config.SecurityConfigurations;
 import com.gabreudev.marketmobile_api.servicies.SaleService;
@@ -28,13 +29,13 @@ public class SaleController {
 
     @PostMapping
     @Description("Método que cadastra uma venda")
-    public ResponseEntity<Long> postSale(@RequestBody Sale data, @AuthenticationPrincipal User user){
+    public ResponseEntity<Long> postSale(@RequestBody SaleRegisterDTO data, @AuthenticationPrincipal User user){
         return ResponseEntity.ok(service.postSale(data, user));
     }
 
     @GetMapping()
     @Description("Retorna todas as vendas feitas pelo usuário autenticado")
-    public ResponseEntity<List<Sale>> getAll(@AuthenticationPrincipal User user){
+    public ResponseEntity<List<SaleResponseDTO>> getAll(@AuthenticationPrincipal User user){
         return ResponseEntity.ok(service.getAllSalesByUser(user));
     }
 
@@ -46,7 +47,7 @@ public class SaleController {
 
     @GetMapping("between")
     @Description("Método que retorna todas as vendas feitas entre um determinado período pelo usuário autenticado")
-    public ResponseEntity<List<Sale>> salesBetween(@RequestParam LocalDateTime startDate,
+    public ResponseEntity<List<SaleResponseDTO>> salesBetween(@RequestParam LocalDateTime startDate,
                                                    @RequestParam LocalDateTime endDate,
                                                    @AuthenticationPrincipal User user){
         return ResponseEntity.ok(service.salesBetween(startDate, endDate, user));
