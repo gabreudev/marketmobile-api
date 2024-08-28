@@ -30,7 +30,7 @@ public class SaleService {
 
     @Transactional
     public Long postSale(Sale data, User user){
-        data.setUser(user); // Associa a venda ao usuário autenticado
+        data.setUser(user);
 
         for (SaleProduct saleProduct : data.getSaleProducts()) {
             String barCode = saleProduct.getProduct().getBarCode();

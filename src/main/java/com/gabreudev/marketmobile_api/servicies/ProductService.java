@@ -1,6 +1,8 @@
 package com.gabreudev.marketmobile_api.servicies;
 
 import com.gabreudev.marketmobile_api.entities.product.Product;
+import com.gabreudev.marketmobile_api.entities.product.ProductRegisterDTO;
+import com.gabreudev.marketmobile_api.entities.product.ProductResponseDTO;
 import com.gabreudev.marketmobile_api.entities.user.User;
 import com.gabreudev.marketmobile_api.exceptions.ProductNotFoundException;
 import com.gabreudev.marketmobile_api.repositories.ProductRepository;
@@ -15,14 +17,16 @@ public class ProductService {
     @Autowired
     ProductRepository repository;
 
-    public List<Product> getAllProductsByUser(User user) {
-        return repository.findByUser(user);
+    public List<ProductResponseDTO> getAllProductsByUser(User user) {
+        List<ProductResponseDTO> products = repository.findAll().stream().map(ProductResponseDTO::new).toList();
+        return products;
     }
 
-    public String postProduct(Product data, User user) {
-        data.setUser(user);
-        repository.save(data);
-        return data.getBarCode();
+    public String postProduct(ProductRegisterDTO data, User user) {
+        Product product = new Product(data);
+        product.setUser(user);
+        repository.save(product);
+        return product.getBarCode();
     }
 
     public String deleteProduct(String barCode, User user) {
@@ -32,13 +36,14 @@ public class ProductService {
         return deleted.getBarCode();
     }
 
-    public String editProduct(Product data, User user) {
-        Product existingProduct = repository.findByBarCodeAndUser(data.getBarCode(), user)
-                .orElseThrow(() -> new ProductNotFoundException("Produto com código de barras " + data.getBarCode() + " não encontrado"));
+    public String editProduct(ProductRegisterDTO data, User user) {
+        Product product = new Product(data);
+        Product existingProduct = repository.findByBarCodeAndUser(product.getBarCode(), user)
+                .orElseThrow(() -> new ProductNotFoundException("Produto com código de barras " + product.getBarCode() + " não encontrado"));
 
-        existingProduct.setName(data.getName());
-        existingProduct.setDescription(data.getDescription());
-        existingProduct.setPrice(data.getPrice());
+        existingProduct.setName(product.getName());
+        existingProduct.setDescription(product.getDescription());
+        existingProduct.setPrice(product.getPrice());
 
         return repository.save(existingProduct).getBarCode();
     }

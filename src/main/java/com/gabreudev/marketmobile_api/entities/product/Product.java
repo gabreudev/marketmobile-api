@@ -28,6 +28,9 @@ public class Product {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    public Product(ProductRegisterDTO data) {
+    }
+
     public User getUser() {
         return user;
     }
