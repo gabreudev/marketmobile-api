@@ -29,6 +29,13 @@ public class Product {
     private User user;
 
     public Product(ProductRegisterDTO data) {
+        this.barCode = data.barCode();
+        this.name = data.name();
+        this.description = data.description();
+        this.price = data.price();
+    }
+    public Product() {
+
     }
 
     public User getUser() {
