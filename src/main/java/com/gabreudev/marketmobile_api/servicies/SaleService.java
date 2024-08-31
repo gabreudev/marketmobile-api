@@ -28,34 +28,34 @@ public class SaleService {
     @Autowired
     ProductRepository productRepository;
 
+    @Transactional
     public Long postSale(SaleRegisterDTO data, User user) {
         Sale sale = new Sale();
         sale.setUser(user);
         sale.setSaleDate(LocalDateTime.now());
         sale.setTotalPrice(data.totalPrice());
 
-        Sale savedSale = saleRepository.save(sale); // Salva o Sale inicialmente
+        Sale savedSale = saleRepository.save(sale);
 
         List<SaleProduct> saleProducts = data.saleProducts().stream()
                 .map(dto -> {
                     Product product = productRepository.findById(dto.productBarCode())
                             .orElseThrow(() -> new ProductNotFoundException("Produto com código de barras " + dto.productBarCode() + " não encontrado"));
                     SaleProduct saleProduct = new SaleProduct(dto, product);
-                    saleProduct.setSale(savedSale); // Associa o Sale ao SaleProduct
+                    saleProduct.setSale(savedSale);
                     return saleProduct;
                 })
                 .collect(Collectors.toList());
 
-        sale.setSaleProducts(saleProducts); // Associa os SaleProducts ao Sale
+        sale.setSaleProducts(saleProducts);
 
-        saleRepository.save(savedSale); // Salva novamente o Sale com os produtos
+        saleRepository.save(savedSale);
 
         return savedSale.getId();
     }
 
 
     public List<SaleResponseDTO> getAllSalesByUser(User user) {
-        // Retornando as vendas do usuário com o DTO SaleResponseDTO
         return saleRepository.findByUser(user).stream()
                 .map(SaleResponseDTO::new)
                 .toList();

@@ -1,18 +1,19 @@
 package com.gabreudev.marketmobile_api.entities.sale;
 
-import com.gabreudev.marketmobile_api.entities.product.Product;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public record SaleResponseDTO(
-        List<SaleProduct> saleProducts,
+        List<SaleProductResponseDTO> saleProducts,
         Float totalPrice,
         LocalDateTime date
 ) {
     public SaleResponseDTO(Sale sale) {
         this(
-                sale.getSaleProducts(),
+                sale.getSaleProducts().stream()
+                        .map(SaleProductResponseDTO::new)
+                        .collect(Collectors.toList()),
                 sale.getTotalPrice(),
                 sale.getSaleDate()
         );
