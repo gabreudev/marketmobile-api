@@ -1,7 +1,6 @@
 package com.gabreudev.marketmobile_api.servicies;
 
 import com.gabreudev.marketmobile_api.entities.product.Product;
-import com.gabreudev.marketmobile_api.entities.product.ProductResponseDTO;
 import com.gabreudev.marketmobile_api.entities.sale.*;
 import com.gabreudev.marketmobile_api.entities.user.User;
 import com.gabreudev.marketmobile_api.exceptions.ProductNotFoundException;
@@ -13,41 +12,53 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SaleService {
-
 
     @Autowired
     SaleRepository saleRepository;
 
     @Autowired
-    SaleProductRepository productSaleRepository;
+    SaleProductRepository saleProductRepository;
 
     @Autowired
     ProductRepository productRepository;
 
-    @Transactional
-    public Long postSale(SaleRegisterDTO data, User user){
-        Sale sale = new Sale(data);
+    public Long postSale(SaleRegisterDTO data, User user) {
+        Sale sale = new Sale();
         sale.setUser(user);
-
-        for (SaleProduct saleProduct : sale.getSaleProducts()) {
-            String barCode = saleProduct.getProduct().getBarCode();
-            Product product = productRepository.findById(barCode)
-                    .orElseThrow(() -> new ProductNotFoundException("Produto com código de barras " + barCode + " não encontrado"));
-
-            saleProduct.setProduct(product);
-        }
         sale.setSaleDate(LocalDateTime.now());
-        Sale savedSale = saleRepository.save(sale);
+        sale.setTotalPrice(data.totalPrice());
+
+        Sale savedSale = saleRepository.save(sale); // Salva o Sale inicialmente
+
+        List<SaleProduct> saleProducts = data.saleProducts().stream()
+                .map(dto -> {
+                    Product product = productRepository.findById(dto.productBarCode())
+                            .orElseThrow(() -> new ProductNotFoundException("Produto com código de barras " + dto.productBarCode() + " não encontrado"));
+                    SaleProduct saleProduct = new SaleProduct(dto, product);
+                    saleProduct.setSale(savedSale); // Associa o Sale ao SaleProduct
+                    return saleProduct;
+                })
+                .collect(Collectors.toList());
+
+        sale.setSaleProducts(saleProducts); // Associa os SaleProducts ao Sale
+
+        saleRepository.save(savedSale); // Salva novamente o Sale com os produtos
+
         return savedSale.getId();
     }
 
+
     public List<SaleResponseDTO> getAllSalesByUser(User user) {
-        List<SaleResponseDTO> sales = saleRepository.findByUser(user).stream().map(SaleResponseDTO::new).toList();
-        return sales;
+        // Retornando as vendas do usuário com o DTO SaleResponseDTO
+        return saleRepository.findByUser(user).stream()
+                .map(SaleResponseDTO::new)
+                .toList();
     }
 
     public Long deleteSale(Long id, User user) {
@@ -58,6 +69,8 @@ public class SaleService {
     }
 
     public List<SaleResponseDTO> salesBetween(LocalDateTime startDate, LocalDateTime endDate, User user) {
-        return saleRepository.findBySaleDateBetweenAndUser(startDate, endDate, user).stream().map(SaleResponseDTO::new).toList();
+        return saleRepository.findBySaleDateBetweenAndUser(startDate, endDate, user).stream()
+                .map(SaleResponseDTO::new)
+                .toList();
     }
 }

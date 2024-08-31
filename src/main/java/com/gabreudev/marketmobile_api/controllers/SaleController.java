@@ -7,6 +7,7 @@ import com.gabreudev.marketmobile_api.infra.Config.SecurityConfigurations;
 import com.gabreudev.marketmobile_api.servicies.SaleService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Description;
@@ -29,7 +30,7 @@ public class SaleController {
 
     @PostMapping
     @Description("Método que cadastra uma venda")
-    public ResponseEntity<Long> postSale(@RequestBody SaleRegisterDTO data, @AuthenticationPrincipal User user){
+    public ResponseEntity<Long> postSale(@Valid @RequestBody SaleRegisterDTO data, @AuthenticationPrincipal User user){
         return ResponseEntity.ok(service.postSale(data, user));
     }
 

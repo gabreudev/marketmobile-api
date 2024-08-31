@@ -5,6 +5,8 @@ import com.gabreudev.marketmobile_api.entities.product.Product;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.Random;
+
 @Entity
 public class SaleProduct {
     @Id
@@ -26,6 +28,11 @@ public class SaleProduct {
     @NotNull
     private Float partialPrice;
 
+    public SaleProduct(SaleProductRegisterDTO dto, Product product) {
+        this.product = product;
+        this.quantity = dto.quantity();
+        this.partialPrice = product.getPrice() * dto.quantity();
+    }
 
     public Sale getSale() {
         return sale;

@@ -1,6 +1,7 @@
 package com.gabreudev.marketmobile_api.entities.sale;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.gabreudev.marketmobile_api.entities.product.Product;
 import com.gabreudev.marketmobile_api.entities.product.ProductResponseDTO;
 import com.gabreudev.marketmobile_api.entities.user.User;
 import jakarta.persistence.*;
@@ -29,11 +30,12 @@ public class Sale {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Sale(SaleRegisterDTO data) {
-        this.totalPrice = data.totalPrice();
-        this.saleProducts = data.saleProducts();
-    }
 
+    public Sale(SaleRegisterDTO data, List<SaleProduct> saleProducts) {
+        this.totalPrice = data.totalPrice();
+        this.saleProducts = saleProducts;
+    }
+    public Sale(){}
 
     public User getUser() {
         return user;

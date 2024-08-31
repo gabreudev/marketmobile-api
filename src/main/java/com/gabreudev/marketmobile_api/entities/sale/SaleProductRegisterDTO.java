@@ -5,3 +5,4 @@ public record SaleProductRegisterDTO(
         Integer quantity,
         Float partialPrice
 ) {}
+
