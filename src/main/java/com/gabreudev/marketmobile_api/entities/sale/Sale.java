@@ -15,7 +15,7 @@ public class Sale {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long id_sale;
 
     private LocalDateTime saleDate;
 
@@ -50,11 +50,11 @@ public class Sale {
     }
 
     public Long getId() {
-        return id;
+        return id_sale;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.id_sale = id;
     }
 
     public LocalDateTime getSaleDate() {

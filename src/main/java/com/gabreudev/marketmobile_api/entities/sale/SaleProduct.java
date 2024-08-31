@@ -11,7 +11,7 @@ import java.util.Random;
 public class SaleProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long id_saleProduct;
 
     @ManyToOne
     @JoinColumn(name = "sale_id")
@@ -33,6 +33,7 @@ public class SaleProduct {
         this.quantity = dto.quantity();
         this.partialPrice = product.getPrice() * dto.quantity();
     }
+    public SaleProduct(){}
 
     public Sale getSale() {
         return sale;
@@ -67,11 +68,11 @@ public class SaleProduct {
     }
 
     public Long getId() {
-        return id;
+        return id_saleProduct;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.id_saleProduct = id;
     }
 
 }
