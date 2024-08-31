@@ -39,7 +39,7 @@ public class SaleService {
 
         List<SaleProduct> saleProducts = data.saleProducts().stream()
                 .map(dto -> {
-                    Product product = productRepository.findById(dto.productBarCode())
+                    Product product = productRepository.findByBarCodeAndUser(dto.productBarCode(), user)
                             .orElseThrow(() -> new ProductNotFoundException("Produto com código de barras " + dto.productBarCode() + " não encontrado"));
                     SaleProduct saleProduct = new SaleProduct(dto, product);
                     saleProduct.setSale(savedSale);
