@@ -1,6 +1,9 @@
 package com.gabreudev.marketmobile_api.entities.sale;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.gabreudev.marketmobile_api.entities.product.Product;
+import com.gabreudev.marketmobile_api.entities.product.ProductResponseDTO;
+import com.gabreudev.marketmobile_api.entities.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -12,7 +15,7 @@ public class Sale {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long id_sale;
 
     private LocalDateTime saleDate;
 
@@ -23,16 +26,35 @@ public class Sale {
     @NotNull
     private Float totalPrice;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+
+    public Sale(SaleRegisterDTO data, List<SaleProduct> saleProducts) {
+        this.totalPrice = data.totalPrice();
+        this.saleProducts = saleProducts;
+    }
+    public Sale(){}
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public List<SaleProduct> getSaleProducts() {
         return saleProducts;
     }
 
     public Long getId() {
-        return id;
+        return id_sale;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.id_sale = id;
     }
 
     public LocalDateTime getSaleDate() {

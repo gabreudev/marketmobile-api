@@ -40,10 +40,11 @@ public class User implements UserDetails {
         this.enabled = enabled != null ? enabled : true;
     }
 
-    public User(String email, String encryptedPassword, UserRole role) {
-        this.email = email;
-        this.password = encryptedPassword;
-        this.userRole = role;
+    public User(RegisterDTO data, String passwordBcripted) {
+        this.email = data.email();
+        this.password = passwordBcripted;
+        this.userRole = UserRole.USER;
+        this.username = data.username();
         this.enabled = true;
     }
 

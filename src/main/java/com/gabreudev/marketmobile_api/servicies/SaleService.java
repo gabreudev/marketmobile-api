@@ -1,8 +1,8 @@
 package com.gabreudev.marketmobile_api.servicies;
 
 import com.gabreudev.marketmobile_api.entities.product.Product;
-import com.gabreudev.marketmobile_api.entities.sale.Sale;
-import com.gabreudev.marketmobile_api.entities.sale.SaleProduct;
+import com.gabreudev.marketmobile_api.entities.sale.*;
+import com.gabreudev.marketmobile_api.entities.user.User;
 import com.gabreudev.marketmobile_api.exceptions.ProductNotFoundException;
 import com.gabreudev.marketmobile_api.repositories.ProductRepository;
 import com.gabreudev.marketmobile_api.repositories.SaleProductRepository;
@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SaleService {
@@ -21,37 +23,54 @@ public class SaleService {
     SaleRepository saleRepository;
 
     @Autowired
-    SaleProductRepository productSaleRepository;
+    SaleProductRepository saleProductRepository;
 
     @Autowired
     ProductRepository productRepository;
 
     @Transactional
-    public Long postSale(Sale data){
+    public Long postSale(SaleRegisterDTO data, User user) {
+        Sale sale = new Sale();
+        sale.setUser(user);
+        sale.setSaleDate(LocalDateTime.now());
+        sale.setTotalPrice(data.totalPrice());
 
-        for (SaleProduct saleProduct : data.getSaleProducts()) {
-            String barCode = saleProduct.getProduct().getBarCode();
-            Product product = productRepository.findById(barCode)
-                    .orElseThrow(() -> new ProductNotFoundException("Produto com código de barras " + barCode + " não encontrado"));
+        Sale savedSale = saleRepository.save(sale);
 
-            saleProduct.setProduct(product);
-            saleProduct.setPartialPrice(product.getPrice() * saleProduct.getQuantity());
-        }
-        data.setSaleDate(LocalDateTime.now());
-        Sale savedSale = saleRepository.save(data);
+        List<SaleProduct> saleProducts = data.saleProducts().stream()
+                .map(dto -> {
+                    Product product = productRepository.findByBarCodeAndUser(dto.productBarCode(), user)
+                            .orElseThrow(() -> new ProductNotFoundException("Produto com código de barras " + dto.productBarCode() + " não encontrado"));
+                    SaleProduct saleProduct = new SaleProduct(dto, product);
+                    saleProduct.setSale(savedSale);
+                    return saleProduct;
+                })
+                .collect(Collectors.toList());
+
+        sale.setSaleProducts(saleProducts);
+
+        saleRepository.save(savedSale);
+
         return savedSale.getId();
     }
 
-    public List<Sale> getAll(){
-        return saleRepository.findAll();
+
+    public List<SaleResponseDTO> getAllSalesByUser(User user) {
+        return saleRepository.findByUser(user).stream()
+                .map(SaleResponseDTO::new)
+                .toList();
     }
 
-    public Long deleteSale(Long id) {
-        saleRepository.deleteById(id);
+    public Long deleteSale(Long id, User user) {
+        Sale sale = saleRepository.findByIdAndUser(id, user)
+                .orElseThrow(() -> new ProductNotFoundException("Venda não encontrada ou você não tem permissão para deletar esta venda."));
+        saleRepository.delete(sale);
         return id;
     }
 
-    public List<Sale> salesBetween(LocalDateTime startDate, LocalDateTime endDate) {
-        return saleRepository.findBySaleDateBetween(startDate, endDate);
+    public List<SaleResponseDTO> salesBetween(LocalDateTime startDate, LocalDateTime endDate, User user) {
+        return saleRepository.findBySaleDateBetweenAndUser(startDate, endDate, user).stream()
+                .map(SaleResponseDTO::new)
+                .toList();
     }
 }

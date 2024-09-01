@@ -53,10 +53,8 @@ public class AuthController {
         if(this.repository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().build();
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        User newUser = new User(data.email(), encryptedPassword, data.role());
-
+        User newUser = new User(data, encryptedPassword);
         this.repository.save(newUser);
-        System.out.println( newUser.getEmail() + newUser.getPassword());
         return ResponseEntity.ok().build();
     } catch (Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Cadastro falhou: " + e.getMessage());
