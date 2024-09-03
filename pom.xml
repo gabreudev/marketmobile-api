@@ -72,6 +72,12 @@
 			<artifactId>java-jwt</artifactId>
 			<version>4.4.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.stripe</groupId>
+			<artifactId>stripe-java</artifactId>
+			<version>26.9.0</version>
+		</dependency>
 		                   <!-- Test dependecies -->
 		<dependency>
 		<groupId>org.springframework.security</groupId>
