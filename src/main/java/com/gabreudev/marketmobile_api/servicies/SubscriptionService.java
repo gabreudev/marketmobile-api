@@ -1,6 +1,7 @@
 package com.gabreudev.marketmobile_api.servicies;
 
 import com.gabreudev.marketmobile_api.entities.user.User;
+import com.gabreudev.marketmobile_api.repositories.UserRepository;
 import com.stripe.Stripe;
 import com.stripe.model.Customer;
 import com.stripe.model.Subscription;
@@ -9,6 +10,7 @@ import com.stripe.model.checkout.Session;
 import com.stripe.param.CustomerCreateParams;
 import com.stripe.param.SubscriptionListParams;
 import com.stripe.param.checkout.SessionCreateParams;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 public class SubscriptionService {
@@ -18,6 +20,9 @@ public class SubscriptionService {
 
     @Value("${stripe.price.id}")
     private String priceId;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public SubscriptionService() {
         Stripe.apiKey = stripeSecretKey;
@@ -45,7 +50,10 @@ public class SubscriptionService {
                 .setName(user.getUsername())
                 .build();
 
-        return Customer.create(params);
+        Customer customer = Customer.create(params);
+        user.setCustomerId(customer.getId());
+        userRepository.save(user);
+        return customer;
     }
     private Customer retrieveCustomer(String customerId) throws Exception {
         return Customer.retrieve(customerId);
