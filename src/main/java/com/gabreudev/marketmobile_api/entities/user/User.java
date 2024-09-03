@@ -29,6 +29,8 @@ public class User implements UserDetails {
 
     private Boolean enabled = true;
 
+    private String customerId;
+
     public User() {
     }
 
@@ -62,6 +64,14 @@ public class User implements UserDetails {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
     @Override
