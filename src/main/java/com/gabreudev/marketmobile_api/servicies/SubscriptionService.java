@@ -12,7 +12,9 @@ import com.stripe.param.SubscriptionListParams;
 import com.stripe.param.checkout.SessionCreateParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
+@Service
 public class SubscriptionService {
 
     @Value("${stripe.secret.key}")
@@ -24,16 +26,23 @@ public class SubscriptionService {
     @Autowired
     private UserRepository userRepository;
 
-    public SubscriptionService() {
-        Stripe.apiKey = stripeSecretKey;
+    public SubscriptionService(@Value("${stripe.secret.key}") String stripeSecretKey) {
+        this.stripeSecretKey = stripeSecretKey;
+        Stripe.apiKey = this.stripeSecretKey;
     }
 
     public Session createCheckoutSession(User user) throws Exception {
+
+        if(user.getCustomerId() ==  null){
+            Customer customer = createCustomer(user);
+            user.setCustomerId(customer.getId());
+        }
+
+        String BaseUrl = "http://localhost:8080";
         SessionCreateParams params = SessionCreateParams.builder()
-                .setCustomer(user.getCustomerId())
                 .setMode(SessionCreateParams.Mode.SUBSCRIPTION)
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
-                .setSuccessUrl("https://www.youtube.com/watch?v=uKxyLmbOc0Q")
+                .setSuccessUrl(BaseUrl+"/pagamento/sucesso?session_id={CHECKOUT_SESSION_ID}")
                 .setCancelUrl("https://www.youtube.com/watch?v=wEWF2xh5E8s")
                 .addLineItem(
                         SessionCreateParams.LineItem.builder()
@@ -55,6 +64,24 @@ public class SubscriptionService {
         userRepository.save(user);
         return customer;
     }
+
+    public void cancelSubscription(User user) throws Exception {
+        if (user.getCustomerId() == null) {
+            throw new Exception("Usuário não possui um customerId associado.");
+        }
+
+        SubscriptionCollection subscriptions = retrieveCustomerSubscriptions(user.getCustomerId());
+
+        for (Subscription subscription : subscriptions.getData()) {
+            if ("active".equals(subscription.getStatus())) {
+                // Cancela a assinatura
+                Subscription canceledSubscription = subscription.cancel();
+                System.out.println("Assinatura cancelada: " + canceledSubscription.getId());
+                break;  // Cancela apenas a primeira assinatura ativa encontrada
+            }
+        }
+    }
+
     private Customer retrieveCustomer(String customerId) throws Exception {
         return Customer.retrieve(customerId);
     }
@@ -75,7 +102,7 @@ public class SubscriptionService {
             }
         }
 
-        return false; // Nenhuma assinatura ativa encontrada
+        return false;
     }
 
 }
