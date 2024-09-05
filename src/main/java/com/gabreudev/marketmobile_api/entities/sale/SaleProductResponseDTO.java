@@ -3,7 +3,6 @@ package com.gabreudev.marketmobile_api.entities.sale;
 import java.util.UUID;
 
 public record SaleProductResponseDTO(
-        UUID id,
         String productBarCode,
         String productName,
         Integer quantity,
@@ -11,9 +10,8 @@ public record SaleProductResponseDTO(
 ) {
     public SaleProductResponseDTO(SaleProduct saleProduct) {
         this(
-                saleProduct.getProduct().getId(),
-                saleProduct.getProduct().getBarCode(),
-                saleProduct.getProduct().getName(),
+                saleProduct.getProductBarCode(),
+                saleProduct.getProductName(),
                 saleProduct.getQuantity(),
                 saleProduct.getPartialPrice()
         );
