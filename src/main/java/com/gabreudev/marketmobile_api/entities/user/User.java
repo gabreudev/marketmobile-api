@@ -31,6 +31,8 @@ public class User implements UserDetails {
 
     private String customerId;
 
+    private String subscriptionId;
+
     public User() {
     }
 
@@ -66,6 +68,12 @@ public class User implements UserDetails {
         this.email = email;
     }
 
+    public String getSubscriptionId() {
+        return subscriptionId;
+    }
+    public void setSubscriptionId(String subscriptionId) {
+        this.subscriptionId = subscriptionId;
+    }
     public String getCustomerId() {
         return customerId;
     }

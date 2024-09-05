@@ -10,9 +10,12 @@ import com.stripe.model.checkout.Session;
 import com.stripe.param.CustomerCreateParams;
 import com.stripe.param.SubscriptionListParams;
 import com.stripe.param.checkout.SessionCreateParams;
+import org.hibernate.annotations.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class SubscriptionService {
@@ -49,6 +52,7 @@ public class SubscriptionService {
                                 .setPrice(priceId)
                                 .setQuantity(1L)
                                 .build())
+                .putMetadata("user_id", user.getId().toString())
                 .build();
 
         return Session.create(params);
@@ -66,43 +70,34 @@ public class SubscriptionService {
     }
 
     public void cancelSubscription(User user) throws Exception {
-        if (user.getCustomerId() == null) {
-            throw new Exception("Usuário não possui um customerId associado.");
+        if (user.getSubscriptionId() == null) {
+            throw new Exception("Usuário não possui uma assinatura associada.");
         }
 
-        SubscriptionCollection subscriptions = retrieveCustomerSubscriptions(user.getCustomerId());
+        // Recupera a assinatura e a cancela
+        Subscription subscription = Subscription.retrieve(user.getSubscriptionId());
+        subscription.cancel();
 
-        for (Subscription subscription : subscriptions.getData()) {
-            if ("active".equals(subscription.getStatus())) {
-                // Cancela a assinatura
-                Subscription canceledSubscription = subscription.cancel();
-                System.out.println("Assinatura cancelada: " + canceledSubscription.getId());
-                break;  // Cancela apenas a primeira assinatura ativa encontrada
-            }
-        }
+        // Remove o subscriptionId após o cancelamento
+        user.setSubscriptionId(null);
+        userRepository.save(user);
     }
 
-    private Customer retrieveCustomer(String customerId) throws Exception {
-        return Customer.retrieve(customerId);
-    }
-    private SubscriptionCollection retrieveCustomerSubscriptions(String customerId) throws Exception {
-        SubscriptionListParams params = SubscriptionListParams.builder()
-                .setCustomer(customerId)
-                .build();
-
-        return Subscription.list(params); // Retorna todas as assinaturas do cliente
-    }
-
-    private boolean isSubscriptionActive(String customerId) throws Exception {
-        SubscriptionCollection subscriptions = retrieveCustomerSubscriptions(customerId);
-
-        for (Subscription subscription : subscriptions.getData()) {
-            if ("active".equals(subscription.getStatus())) {
-                return true; // Assinatura ativa encontrada
-            }
+    // Verificar se a assinatura do usuário está ativa
+    public boolean isSubscriptionActive(User user) throws Exception {
+        if (user.getSubscriptionId() == null) {
+            return false;
         }
 
-        return false;
+        Subscription subscription = Subscription.retrieve(user.getSubscriptionId());
+        return "active".equals(subscription.getStatus());
     }
 
+    public void confirmSubscription(String subscriptionId, UUID user_id) {
+        User user = userRepository.findById(user_id).orElseThrow(
+                () -> new RuntimeException("Id de usuario invalido. Nenhum usuario encontrado com o id" + user_id)
+        );
+        user.setSubscriptionId(subscriptionId);
+        userRepository.save(user);
+    }
 }
