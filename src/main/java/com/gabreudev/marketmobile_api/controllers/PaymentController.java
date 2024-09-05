@@ -24,22 +24,16 @@ public class PaymentController {
     public String handleSuccess(@RequestParam("session_id") String sessionId, @AuthenticationPrincipal User user) throws Exception {
         Session session = Session.retrieve(sessionId);
 
-        // Obter o ID da assinatura criada na sessão de pagamento
         String subscriptionId = session.getSubscription();
 
         String userId = session.getMetadata().get("user_id");
         UUID id = UUID.fromString(userId);
         service.confirmSubscription(subscriptionId, id);
-
-        // Recuperar a assinatura do Stripe usando o subscriptionId
         Subscription subscription = Subscription.retrieve(subscriptionId);
 
-        // Verificar o status da assinatura
         if ("active".equals(subscription.getStatus())) {
-            // A assinatura está ativa, faça o que for necessário, como marcar o usuário como ativo no sistema
             return "Assinatura ativa!";
         } else {
-            // A assinatura não está ativa, trate isso conforme necessário
             return "Assinatura não está ativa.";
         }
     }
