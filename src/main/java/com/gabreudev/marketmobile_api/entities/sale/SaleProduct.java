@@ -19,7 +19,7 @@ public class SaleProduct {
     private Sale sale;
 
     @ManyToOne
-    @JoinColumn(name = "product_barcode")
+    @JoinColumn(name = "product_id")
     private Product product;
 
     @NotNull

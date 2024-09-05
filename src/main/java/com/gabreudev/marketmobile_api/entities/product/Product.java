@@ -4,6 +4,8 @@ import com.gabreudev.marketmobile_api.entities.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "products", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"bar_code", "user_id"})
@@ -11,6 +13,9 @@ import jakarta.validation.constraints.*;
 public class Product {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id_product;
+
     @Pattern(regexp = "\\d{12}", message = "O código de barras deve ter 12 dígitos.")
     private String barCode;
 
@@ -36,6 +41,13 @@ public class Product {
     }
     public Product() {
 
+    }
+    public UUID getId() {
+        return id_product;
+    }
+
+    public void setId(UUID id) {
+        this.id_product = id;
     }
 
     public User getUser() {
