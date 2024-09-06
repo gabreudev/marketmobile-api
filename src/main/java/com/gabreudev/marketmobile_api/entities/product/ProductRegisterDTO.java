@@ -5,5 +5,6 @@ public record ProductRegisterDTO(
         String name,
         String description,
         Float price,
-        Integer stock
+        Integer stock,
+        Integer warningStock
 ) {}

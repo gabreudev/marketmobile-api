@@ -28,6 +28,8 @@ public class Product {
 
     private Integer stock;
 
+    private Integer warningStock;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -37,6 +39,8 @@ public class Product {
         this.name = data.name();
         this.description = data.description();
         this.price = data.price();
+        this.stock = data.stock();
+        this.warningStock = data.warningStock();
     }
     public Product() {
 
@@ -83,6 +87,9 @@ public class Product {
         return barCode;
     }
 
+    public void setBarCode(String barCode) {
+        this.barCode = barCode;
+    }
     public Integer getStock() {
         return stock;
     }
@@ -91,8 +98,11 @@ public class Product {
         this.stock = stock;
     }
 
-    public void setBarCode(String barCode) {
-        this.barCode = barCode;
+    public Integer getWarningStock() {
+        return warningStock;
     }
 
+    public void setWarningStock(Integer warningStock) {
+        this.warningStock = warningStock;
+    }
 }
