@@ -35,28 +35,34 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String requestURI = request.getRequestURI();
+
         var token = this.recoverToken(request);
         if (token != null) {
             var login = tokenService.validateToken(token);
             User user = userRepository.findByEmail(login);
 
             if (user != null) {
-                try {
-                    if (!subscriptionService.isSubscriptionActive(user)) {
-                        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                        response.setContentType("application/json");
-                        response.getWriter().write("{\"error\": \"A assinatura nao esta ativa.\"}");
-                        response.getWriter().flush();
-                        return;
-                    }
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-
                 var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                if (!requestURI.startsWith("/api/sub/create-checkout-session")) {
+                    try {
+                        if (!subscriptionService.isSubscriptionActive(user)) {
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            response.setContentType("application/json");
+                            response.getWriter().write("{\"error\": \"A assinatura não está ativa.\"}");
+                            response.getWriter().flush();
+                            return;
+                        }
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             }
         }
+
+        // Prosseguir com o filtro padrão após autenticação
         filterChain.doFilter(request, response);
     }
 }
