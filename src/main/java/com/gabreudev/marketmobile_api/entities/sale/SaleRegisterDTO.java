@@ -4,5 +4,6 @@ import java.util.List;
 
 public record SaleRegisterDTO(
         List<SaleProductRegisterDTO> saleProducts,
-        Float totalPrice
+        Float totalPrice,
+        Float discount
 ) {}

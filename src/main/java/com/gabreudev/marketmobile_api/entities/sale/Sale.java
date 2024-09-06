@@ -24,6 +24,8 @@ public class Sale {
     @NotNull
     private Float totalPrice;
 
+    private Float discount;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -73,6 +75,14 @@ public class Sale {
 
     public void setTotalPrice(Float totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public Float getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Float discount) {
+        this.discount = discount;
     }
 }
 

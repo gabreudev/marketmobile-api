@@ -35,7 +35,7 @@ public class SaleProduct {
         this.productName = product.getName();
         this.productPrice = product.getPrice();
         this.quantity = dto.quantity();
-        this.partialPrice = product.getPrice() * dto.quantity();
+        this.partialPrice = dto.partialPrice();
     }
 
     public SaleProduct(){}

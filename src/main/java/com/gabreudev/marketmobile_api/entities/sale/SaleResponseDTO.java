@@ -7,7 +7,8 @@ import java.util.stream.Collectors;
 public record SaleResponseDTO(
         List<SaleProductResponseDTO> saleProducts,
         Float totalPrice,
-        LocalDateTime date
+        LocalDateTime date,
+        Float discount
 ) {
     public SaleResponseDTO(Sale sale) {
         this(
@@ -15,7 +16,8 @@ public record SaleResponseDTO(
                         .map(SaleProductResponseDTO::new)
                         .collect(Collectors.toList()),
                 sale.getTotalPrice(),
-                sale.getSaleDate()
+                sale.getSaleDate(),
+                sale.getDiscount()
         );
     }
 }
