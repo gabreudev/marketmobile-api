@@ -1,6 +1,5 @@
 package com.gabreudev.marketmobile_api.entities.sale;
 
-import java.util.UUID;
 
 public record SaleProductResponseDTO(
         String productBarCode,
