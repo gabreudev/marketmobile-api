@@ -1,4 +1,4 @@
-package com.gabreudev.marketmobile_api.entities.sale;
+package com.gabreudev.marketmobile_api.entities.saleProduct;
 
 
 public record SaleProductResponseDTO(

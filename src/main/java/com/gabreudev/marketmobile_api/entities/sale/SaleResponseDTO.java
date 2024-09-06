@@ -1,5 +1,7 @@
 package com.gabreudev.marketmobile_api.entities.sale;
 
+import com.gabreudev.marketmobile_api.entities.saleProduct.SaleProductResponseDTO;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;

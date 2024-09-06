@@ -2,10 +2,10 @@ package com.gabreudev.marketmobile_api.servicies;
 
 import com.gabreudev.marketmobile_api.entities.product.Product;
 import com.gabreudev.marketmobile_api.entities.sale.*;
+import com.gabreudev.marketmobile_api.entities.saleProduct.SaleProduct;
 import com.gabreudev.marketmobile_api.entities.user.User;
 import com.gabreudev.marketmobile_api.exceptions.ProductNotFoundException;
 import com.gabreudev.marketmobile_api.repositories.ProductRepository;
-import com.gabreudev.marketmobile_api.repositories.SaleProductRepository;
 import com.gabreudev.marketmobile_api.repositories.SaleRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
