@@ -26,6 +26,8 @@ public class Product {
     @Positive(message = "O preço deve ser um valor positivo.")
     private Float price;
 
+    private Integer stock;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -79,6 +81,14 @@ public class Product {
     }
     public String getBarCode() {
         return barCode;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
     }
 
     public void setBarCode(String barCode) {

@@ -7,7 +7,8 @@ public record ProductResponseDTO(
         String barCode,
         String name,
         String description,
-        Float price
+        Float price,
+        Integer stock
         ) {
         public ProductResponseDTO(Product product) {
                 this(
@@ -15,7 +16,8 @@ public record ProductResponseDTO(
                         product.getBarCode(),
                         product.getName(),
                         product.getDescription(),
-                        product.getPrice()
+                        product.getPrice(),
+                        product.getStock()
                 );
         }
 }

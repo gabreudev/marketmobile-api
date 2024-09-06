@@ -22,8 +22,6 @@ public class SaleService {
     @Autowired
     SaleRepository saleRepository;
 
-    @Autowired
-    SaleProductRepository saleProductRepository;
 
     @Autowired
     ProductRepository productRepository;
@@ -42,6 +40,10 @@ public class SaleService {
                     Product product = productRepository.findByBarCodeAndUser(dto.productBarCode(), user)
                             .orElseThrow(() -> new ProductNotFoundException("Produto com código de barras " + dto.productBarCode() + " não encontrado"));
                     SaleProduct saleProduct = new SaleProduct(dto, product);
+                    if (product.getStock()!=null && product.getStock()!=0) {
+                        product.setStock(product.getStock()-saleProduct.getQuantity());
+                        productRepository.save(product);
+                    }
                     saleProduct.setSale(savedSale);
                     return saleProduct;
                 })
