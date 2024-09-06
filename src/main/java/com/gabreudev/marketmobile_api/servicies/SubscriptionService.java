@@ -42,7 +42,7 @@ public class SubscriptionService {
                 .setMode(SessionCreateParams.Mode.SUBSCRIPTION)
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
                 .setSuccessUrl(BaseUrl+"/pagamento/sucesso?session_id={CHECKOUT_SESSION_ID}")
-                .setCancelUrl("https://www.youtube.com/watch?v=wEWF2xh5E8s")
+                .setCancelUrl("/pagamento/erro")
                 .addLineItem(
                         SessionCreateParams.LineItem.builder()
                                 .setPrice(priceId)
