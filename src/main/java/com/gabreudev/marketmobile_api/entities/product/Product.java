@@ -7,9 +7,6 @@ import jakarta.validation.constraints.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "products", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"bar_code", "user_id"})
-})
 public class Product {
 
     @Id

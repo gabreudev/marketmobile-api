@@ -1,7 +1,6 @@
 package com.gabreudev.marketmobile_api.infra;
 
 import com.gabreudev.marketmobile_api.exceptions.ProductNotFoundException;
-import jakarta.servlet.ServletException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +19,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleProductNotFoundException(ProductNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
     }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
