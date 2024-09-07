@@ -1,8 +1,7 @@
 package com.gabreudev.marketmobile_api.entities.sale;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.gabreudev.marketmobile_api.entities.product.Product;
-import com.gabreudev.marketmobile_api.entities.product.ProductResponseDTO;
+import com.gabreudev.marketmobile_api.entities.saleProduct.SaleProduct;
 import com.gabreudev.marketmobile_api.entities.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -25,6 +24,8 @@ public class Sale {
 
     @NotNull
     private Float totalPrice;
+
+    private Float discount;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -75,6 +76,14 @@ public class Sale {
 
     public void setTotalPrice(Float totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public Float getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Float discount) {
+        this.discount = discount;
     }
 }
 

@@ -1,4 +1,5 @@
-package com.gabreudev.marketmobile_api.entities.sale;
+package com.gabreudev.marketmobile_api.entities.saleProduct;
+
 
 public record SaleProductResponseDTO(
         String productBarCode,
@@ -8,8 +9,8 @@ public record SaleProductResponseDTO(
 ) {
     public SaleProductResponseDTO(SaleProduct saleProduct) {
         this(
-                saleProduct.getProduct().getBarCode(),
-                saleProduct.getProduct().getName(),
+                saleProduct.getProductBarCode(),
+                saleProduct.getProductName(),
                 saleProduct.getQuantity(),
                 saleProduct.getPartialPrice()
         );

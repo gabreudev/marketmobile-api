@@ -4,6 +4,7 @@ import com.gabreudev.marketmobile_api.entities.product.Product;
 import com.gabreudev.marketmobile_api.entities.product.ProductRegisterDTO;
 import com.gabreudev.marketmobile_api.entities.product.ProductResponseDTO;
 import com.gabreudev.marketmobile_api.entities.user.User;
+import com.gabreudev.marketmobile_api.exceptions.ProductAlreadyExistsException;
 import com.gabreudev.marketmobile_api.exceptions.ProductNotFoundException;
 import com.gabreudev.marketmobile_api.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class ProductService {
     public String postProduct(ProductRegisterDTO data, User user) {
         Product product = new Product(data);
         product.setUser(user);
+        if (repository.findByBarCodeAndUser(product.getBarCode(), user).isPresent()){
+            throw new ProductAlreadyExistsException("Já existe um produto cadastrado com esse codigo de barras.");
+        }
         repository.save(product);
         return product.getBarCode();
     }
@@ -42,6 +46,8 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNotFoundException("Produto com código de barras " + product.getBarCode() + " não encontrado"));
 
         existingProduct.setName(product.getName());
+        existingProduct.setStock(product.getStock());
+        existingProduct.setWarningStock(product.getWarningStock());
         existingProduct.setDescription(product.getDescription());
         existingProduct.setPrice(product.getPrice());
 

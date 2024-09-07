@@ -2,17 +2,17 @@ package com.gabreudev.marketmobile_api.servicies;
 
 import com.gabreudev.marketmobile_api.entities.product.Product;
 import com.gabreudev.marketmobile_api.entities.sale.*;
+import com.gabreudev.marketmobile_api.entities.saleProduct.SaleProduct;
 import com.gabreudev.marketmobile_api.entities.user.User;
 import com.gabreudev.marketmobile_api.exceptions.ProductNotFoundException;
 import com.gabreudev.marketmobile_api.repositories.ProductRepository;
-import com.gabreudev.marketmobile_api.repositories.SaleProductRepository;
 import com.gabreudev.marketmobile_api.repositories.SaleRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,8 +22,6 @@ public class SaleService {
     @Autowired
     SaleRepository saleRepository;
 
-    @Autowired
-    SaleProductRepository saleProductRepository;
 
     @Autowired
     ProductRepository productRepository;
@@ -42,6 +40,10 @@ public class SaleService {
                     Product product = productRepository.findByBarCodeAndUser(dto.productBarCode(), user)
                             .orElseThrow(() -> new ProductNotFoundException("Produto com código de barras " + dto.productBarCode() + " não encontrado"));
                     SaleProduct saleProduct = new SaleProduct(dto, product);
+                    if (product.getStock()!=null && product.getStock()!=0) {
+                        product.setStock(product.getStock()-saleProduct.getQuantity());
+                        productRepository.save(product);
+                    }
                     saleProduct.setSale(savedSale);
                     return saleProduct;
                 })

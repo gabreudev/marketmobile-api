@@ -1,5 +1,7 @@
 package com.gabreudev.marketmobile_api.entities.sale;
 
+import com.gabreudev.marketmobile_api.entities.saleProduct.SaleProductResponseDTO;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,7 +9,8 @@ import java.util.stream.Collectors;
 public record SaleResponseDTO(
         List<SaleProductResponseDTO> saleProducts,
         Float totalPrice,
-        LocalDateTime date
+        LocalDateTime date,
+        Float discount
 ) {
     public SaleResponseDTO(Sale sale) {
         this(
@@ -15,7 +18,8 @@ public record SaleResponseDTO(
                         .map(SaleProductResponseDTO::new)
                         .collect(Collectors.toList()),
                 sale.getTotalPrice(),
-                sale.getSaleDate()
+                sale.getSaleDate(),
+                sale.getDiscount()
         );
     }
 }

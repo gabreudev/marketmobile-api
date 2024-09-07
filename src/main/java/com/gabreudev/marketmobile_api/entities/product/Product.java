@@ -1,16 +1,18 @@
 package com.gabreudev.marketmobile_api.entities.product;
 
 import com.gabreudev.marketmobile_api.entities.user.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+
+import java.util.UUID;
 
 @Entity
 public class Product {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id_product;
+
     @Pattern(regexp = "\\d{12}", message = "O código de barras deve ter 12 dígitos.")
     private String barCode;
 
@@ -24,6 +26,10 @@ public class Product {
     @Positive(message = "O preço deve ser um valor positivo.")
     private Float price;
 
+    private Integer stock;
+
+    private Integer warningStock;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -33,9 +39,18 @@ public class Product {
         this.name = data.name();
         this.description = data.description();
         this.price = data.price();
+        this.stock = data.stock();
+        this.warningStock = data.warningStock();
     }
     public Product() {
 
+    }
+    public UUID getId() {
+        return id_product;
+    }
+
+    public void setId(UUID id) {
+        this.id_product = id;
     }
 
     public User getUser() {
@@ -75,5 +90,19 @@ public class Product {
     public void setBarCode(String barCode) {
         this.barCode = barCode;
     }
+    public Integer getStock() {
+        return stock;
+    }
 
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
+    public Integer getWarningStock() {
+        return warningStock;
+    }
+
+    public void setWarningStock(Integer warningStock) {
+        this.warningStock = warningStock;
+    }
 }

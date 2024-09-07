@@ -1,14 +1,14 @@
-package com.gabreudev.marketmobile_api.entities.sale;
+package com.gabreudev.marketmobile_api.entities.saleProduct;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.gabreudev.marketmobile_api.entities.product.Product;
+import com.gabreudev.marketmobile_api.entities.sale.Sale;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.Random;
-
 @Entity
 public class SaleProduct {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id_saleProduct;
@@ -18,9 +18,12 @@ public class SaleProduct {
     @JsonBackReference
     private Sale sale;
 
-    @ManyToOne
-    @JoinColumn(name = "product_barcode")
-    private Product product;
+    @NotNull
+    private String productBarCode;
+
+    private String productName;
+
+    private Float productPrice;
 
     @NotNull
     private Integer quantity;
@@ -29,11 +32,40 @@ public class SaleProduct {
     private Float partialPrice;
 
     public SaleProduct(SaleProductRegisterDTO dto, Product product) {
-        this.product = product;
+        this.productBarCode = product.getBarCode();
+        this.productName = product.getName();
+        this.productPrice = product.getPrice();
         this.quantity = dto.quantity();
-        this.partialPrice = product.getPrice() * dto.quantity();
+        this.partialPrice = dto.partialPrice();
     }
+
     public SaleProduct(){}
+
+    // Getters e Setters
+
+    public String getProductBarCode() {
+        return productBarCode;
+    }
+
+    public void setProductBarCode(String productBarCode) {
+        this.productBarCode = productBarCode;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public Float getProductPrice() {
+        return productPrice;
+    }
+
+    public void setProductPrice(Float productPrice) {
+        this.productPrice = productPrice;
+    }
 
     public Sale getSale() {
         return sale;
@@ -41,10 +73,6 @@ public class SaleProduct {
 
     public void setSale(Sale sale) {
         this.sale = sale;
-    }
-
-    public Product getProduct() {
-        return product;
     }
 
     public Float getPartialPrice() {
@@ -63,10 +91,6 @@ public class SaleProduct {
         this.quantity = quantity;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
     public Long getId() {
         return id_saleProduct;
     }
@@ -74,5 +98,4 @@ public class SaleProduct {
     public void setId(Long id) {
         this.id_saleProduct = id;
     }
-
 }
