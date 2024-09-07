@@ -22,6 +22,9 @@ public class SubscriptionService {
     @Value("${stripe.price.id}")
     private String priceId;
 
+    @Value("${api.base.url}")
+    private String BaseUrl;
+
     @Autowired
     private UserRepository userRepository;
 
@@ -37,7 +40,7 @@ public class SubscriptionService {
             user.setCustomerId(customer.getId());
         }
 
-        String BaseUrl = "http://localhost:8080";
+
         SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.SUBSCRIPTION)
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
