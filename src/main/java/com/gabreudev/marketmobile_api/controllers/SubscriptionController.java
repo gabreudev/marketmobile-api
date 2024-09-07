@@ -3,8 +3,6 @@ package com.gabreudev.marketmobile_api.controllers;
 import com.gabreudev.marketmobile_api.entities.user.User;
 import com.gabreudev.marketmobile_api.infra.Config.SecurityConfigurations;
 import com.gabreudev.marketmobile_api.servicies.SubscriptionService;
-import com.stripe.exception.StripeException;
-import com.stripe.model.Customer;
 import com.stripe.model.checkout.Session;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
