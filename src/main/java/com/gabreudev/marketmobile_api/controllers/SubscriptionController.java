@@ -42,14 +42,4 @@ public class SubscriptionController {
             return ResponseEntity.status(500).body("Erro ao cancelar assinatura: " + e.getMessage());
         }
     }
-    @PostMapping("/create-customer")
-    public ResponseEntity<String> createCustomer(@AuthenticationPrincipal User user) {
-        try {
-            Customer customer = service.createCustomer(user);
-
-            return ResponseEntity.ok(customer.getId());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Erro ao criar customer para o usuario: " + e.getMessage());
-        }
-    }
 }
