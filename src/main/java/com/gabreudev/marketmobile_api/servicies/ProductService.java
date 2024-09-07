@@ -42,6 +42,8 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNotFoundException("Produto com código de barras " + product.getBarCode() + " não encontrado"));
 
         existingProduct.setName(product.getName());
+        existingProduct.setStock(product.getStock());
+        existingProduct.setWarningStock(product.getWarningStock());
         existingProduct.setDescription(product.getDescription());
         existingProduct.setPrice(product.getPrice());
 
