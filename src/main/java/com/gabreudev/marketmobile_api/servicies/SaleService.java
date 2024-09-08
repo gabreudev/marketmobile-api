@@ -32,6 +32,7 @@ public class SaleService {
         sale.setUser(user);
         sale.setSaleDate(LocalDateTime.now());
         sale.setTotalPrice(data.totalPrice());
+        sale.setDiscount(data.discount());
 
         Sale savedSale = saleRepository.save(sale);
 
